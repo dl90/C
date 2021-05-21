@@ -3,7 +3,13 @@
 
 /*
   # compile
+  {
+    compile => object code/tokenized instructions,
+    link    => adds C libraries to object code
+  }
   gcc fileName.c [-o binaryFileName]
+  cc
+  clang
 
   # run
   ./binaryFileName || a.out
@@ -12,11 +18,6 @@
 // constants
 const int CONSTANT_VAR = 1;
 #define NUM 20
-
-// int add_two_nums(int num1, int num2);
-// int add_two_nums(int num1, int num2) {
-//   return num1 + num2;
-// }
 
 int main(void) {
   printf("%d Hello World\n\n", NUM);
@@ -35,7 +36,7 @@ int main(void) {
     float:        32 bits, 23 bit mantisa, 8 bit exponent
     double:       64 bits, 53 bit mantisa, 11 bit exponent
     long double:  80 bits, 64 bit mantisa, 15 bit exponent
-   */
+  */
   printf("char size: %lu bytes\n", sizeof(char));
   printf("int size: %lu bytes\n", sizeof(int));
   printf("short size: %lu bytes\n", sizeof(short));
@@ -80,13 +81,15 @@ int main(void) {
     # pointers
   */
   int var_1;
-  int *ptr_1 = &var_1; // creates new pointer, assigns address of age variable to pointer
-  *ptr_1 = 37;         // dereference pointer, updates value at that address (age)
+  int *ptr_1 = NULL;
+  ptr_1 = &var_1; // creates new pointer (ptr_1), assigns address of variable (var_1) to pointer
+  *ptr_1 = 37;    // dereference pointer, updates value of variable at that address (var_1)
   printf("ptr addr %p\nptr val: %p\nvar addr: %p\nvar val: %d\nderef ptr val: %d\n\n",
          &ptr_1, ptr_1, &var_1, var_1, *ptr_1);
 
   char arr_1[8] = "abcdefg";
-  for (int i = 0; i < sizeof(arr_1) / sizeof(arr_1[0]); i++)
+  int len = sizeof(arr_1) / sizeof(arr_1[0]);
+  for (int i = 0; i < len; i++)
     printf("%p\n", &arr_1[i]);
 
   printf("\n----------\n");
