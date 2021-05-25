@@ -1,5 +1,5 @@
-#include <math.h>
 #include <stdio.h>
+#include <math.h>
 
 const int MAX_STR_SIZE = 64;
 
@@ -7,7 +7,7 @@ int main() {
   int rows;
   float x;
 
-  // string buffers
+  // string buffers (array of char without strings terminating zero)
   char cmd[20];
   char args[MAX_STR_SIZE];
 

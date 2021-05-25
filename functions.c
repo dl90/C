@@ -1,8 +1,11 @@
 #include <stdio.h>
+#include <ctype.h>
 
 const int STR_SIZE = 256;
 
+// function prototype (only if func is not defined immediately)
 void hi(void);
+void echo(void);
 void parse(char *);
 void upper(char *);
 double pow2(int n, int p);
@@ -17,28 +20,36 @@ double pow2(int n, int p);
     functions can not access variables outside its scope, only values passed
 */
 
-int main(void) {
+int main() {
   char str[STR_SIZE];
   double num;
   int x, y;
 
   hi();
+  echo();
   parse(str);
   upper(str);
+  printf("\n%s", str);
 
   printf("enter 2 nums (pow): ");
-  scanf("%d", &x);
-  scanf("%d", &y);
+  scanf("%d %d", &x, &y);
   num = pow2(x, y);
-
-  printf("\n%s", str);
   printf("%f\n\n", num);
 
   return 0;
 }
 
-void hi() {
+void hi(void) {
   printf("\nHello, World!\n");
+}
+
+void echo(void) {
+  printf("echo a string: ");
+  char c;
+  do {
+    c = getchar();
+    putchar(c);
+  } while (c != '\n');
 }
 
 void parse(char *str) {
