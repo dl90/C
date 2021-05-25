@@ -27,16 +27,25 @@ int main() {
   // const types are scoped within the body it is defined
   const char *strs = "some long string";
   char str_buffer[STR_SIZE];
+  char *ptr_arr[3] = {"abc", "bcd", "cde"};
 
-  int len = strlen(strs);
-  printf("len: %d\n\n", len);
+  for (int i = 0; i < sizeof(ptr_arr) / sizeof(ptr_arr[0]); i++) {
+    printf("%p %s\n", ptr_arr[i], ptr_arr[i]);
+
+    // pointer notation (same as ptr_arr[i])
+    char *x = *(ptr_arr + i);
+    while (*x) {
+      printf("\t%p %c\n", x, *x);
+      x++;
+    }
+  }
+
+  // int len = strlen(strs);
+  // printf("len: %d\n\n", len);
+
   parse_print(str_buffer);
-
   concat_str(str_buffer, strs);
-  printf("%s\n", str_buffer);
-
   replace(str_buffer, 2, "insert");
-  printf("%s\n", str_buffer);
 }
 
 void parse_print(char *str) {
@@ -44,7 +53,7 @@ void parse_print(char *str) {
   fgets(str, STR_SIZE, stdin);
 
   str[strcspn(str, "\n")] = 0;
-  printf("%s\n\n", str);
+  printf("%s\n", str);
 }
 
 /*
@@ -56,6 +65,7 @@ void parse_print(char *str) {
 void concat_str(char *buf, const char *str) {
   strcat(buf, " ");
   strcat(buf, str);
+  printf("%s\n", buf);
 }
 
 void replace(char *buf, int idx, char *str) {
@@ -66,4 +76,5 @@ void replace(char *buf, int idx, char *str) {
       str++;
     }
   }
+  printf("%s\n", buf);
 }
