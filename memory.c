@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #define KB 1024
@@ -16,6 +17,9 @@ void randChar(char *, int len);
 
   C does not have automatic garbage collection
   so we need to manage all dynamic memory used during execution
+
+  variable declarations (int x) uses the stack
+  dynamic variables (malloc) uses the heap
 */
 
 int main() {
@@ -42,7 +46,7 @@ int main() {
   }
   printf("%p, %d\n", mem_1, mem_1_len);
   randChar(mem_1, mem_1_len);
-  printAddrs(mem_1, mem_1_len);
+  // printAddrs(mem_1, mem_1_len);
 
   /*
     calloc (contiguous allocation)
@@ -58,7 +62,7 @@ int main() {
   }
   printf("%p, %d\n", mem_2, mem_2_len);
   randChar(mem_2, mem_2_len);
-  printAddrs(mem_2, mem_2_len);
+  // printAddrs(mem_2, mem_2_len);
 
   /*
     realloc
@@ -76,7 +80,7 @@ int main() {
   }
   printf("%p, %d\n", mem_1, mem_1_len);
   randChar(mem_1, mem_1_len);
-  printAddrs(mem_1, mem_1_len);
+  // printAddrs(mem_1, mem_1_len);
 
   /*
     releases memory allocated after use
@@ -88,31 +92,55 @@ int main() {
     eg: losing reference to allocated memory block
     DO NOT MODIFY ORIGINAL REFERENCE returned by memory allocation calls, assign another pointer
   */
-  free(mem_1);
+  // free(mem_1);
   free(mem_2);
 
   printAddrs(mem_1, mem_1_len);
   printAddrs(mem_2, mem_2_len);
 
   // assign NULL to freed pointers to prevent future accidental assignments
-  mem_1 = NULL;
+  // mem_1 = NULL;
   mem_2 = NULL;
+
+  /*
+    memcpy
+
+    copies n bytes from a src to a dest, returns pointer to dest
+    memory areas of src and dest should not overlap
+  */
+  mem_2 = (char *)malloc(sizeof(char) * mem_1_len);
+  mem_2 = memcpy(mem_2, mem_1, mem_1_len);
+  printAddrs(mem_1, mem_1_len);
+  printAddrs(mem_2, mem_1_len);
+
+  /*
+    memmove
+
+    similar to memcpy but allows overlap
+  */
+  char nums[10] = {'a', 'b', 'c', 'd', 'e'};
+  char *ptr;
+
+  ptr = memmove(nums + 3, nums, 7);
+  printAddrs(nums, 10);
+  printAddrs(ptr, 6);
+
+  free(mem_1);
+  free(mem_2);
 
   return 0;
 }
 
 void printAddrs(char *ptr, int len) {
-  char *ref = ptr;
   for (int i = 0; i < len; i++) {
     printf("%p => %c\t", ptr + i, *(ptr + i));
     if (i && (i + 1) % 5 == 0)
       printf("\n");
   }
-  printf("\n%s\n\n", ref);
+  printf("\n%s\n\n", ptr);
 }
 
 void randChar(char *ptr, int len) {
-  // typecast
   srand((unsigned)time(0));
 
   for (int i = 0; i < len; i++)

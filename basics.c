@@ -10,12 +10,13 @@
   gcc fileName.c [-o binaryFileName]
   cc
   clang
+  c99
 
   # run
   ./binaryFileName || a.out
 */
 
-// constants
+// constants (file scope/global definition)
 #define NUM 20
 const int CONSTANT_VAR = 1;
 
@@ -23,14 +24,16 @@ void floatSizes(void);
 void typeOverflow(void);
 void arrays(void);
 void strings(void);
-void pointer(void);
+void pointers(void);
 void arrayAddress(char[]);
 void arrayPointer(char *);
 void array2D(void);
 
 int main() {
+  // %d int format specifier
   printf("Hello World %d\n\n", NUM);
 
+  // block scope definition (declaration + initialization)
   char arr_1[] = "abcdefg";
 
   // can be nested
@@ -125,6 +128,9 @@ void arrays() {
 
   are actually an array of char values
   one extra space is needed for string terminator '\0'
+
+  char * => string
+  char ** => array of strings
 */
 void strings() {
   char hello_1[6] = {'H', 'e', 'l', 'l', 'o', '\0'};
@@ -144,8 +150,13 @@ void strings() {
 void pointers() {
   int var_1;
   int *ptr_1 = NULL;
+  int **ptr_ptr = NULL; // address of an int pointer
+
   ptr_1 = &var_1; // creates new pointer (ptr_1), assigns address of variable (var_1) to pointer
   *ptr_1 = 37;    // dereference pointer, updates value of variable at that address (var_1)
+
+  ptr_ptr = &ptr_1; // pointer pointing to the address of a pointer
+  **ptr_ptr = 35;   // dereferencing twice: ptr_ptr => ptr_1 => var_1
 
   printf("ptr addr %p\nptr val: %p\nvar addr: %p\nvar val: %d\nderef ptr val: %d\n\n",
          &ptr_1, ptr_1, &var_1, var_1, *ptr_1);
