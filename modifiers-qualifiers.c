@@ -7,6 +7,25 @@ void func_3(char *const ptr);
 void func_4(const char *const ptr);
 void func_5(char *const *const ptr);
 
+/*
+  # modifiers
+
+  keywords that modify datatypes, affects the memory allocated
+
+  short
+  long (int, double)
+  signed
+  unsigned
+  long long
+
+
+  # qualifiers
+
+  applies to datatypes and modifiers
+
+  const
+  volatile: variables that may change external of main execution code
+*/
 int main() {
   char str[5] = {'a', 'b', 'c', 'd', '\0'};
 
