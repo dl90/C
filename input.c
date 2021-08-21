@@ -66,12 +66,11 @@ void printRows(int c) {
 char *parseInput() {
   char *input = malloc(sizeof(char) * MAX_STR_SIZE);
   if (input == NULL) {
-    printf("Failed to allocate memory");
+    printf("Failed to allocate memory\n");
     exit(1);
   }
 
   printf("Enter input: ");
   fgets(input, MAX_STR_SIZE, stdin);
   return (char *)memmove(input, input, strlen(input));
-  ;
 }

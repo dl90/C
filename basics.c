@@ -11,6 +11,7 @@
   cc
   clang
   c99
+  make
 
   # run
   ./binaryFileName || a.out

@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <ctype.h>
+#include <stdio.h>
 
 const int STR_SIZE = 256;
 
@@ -8,6 +8,7 @@ void hi(void);
 void echo(void);
 void parse(char *);
 void upper(char *);
+void swap(int *, int *);
 double pow2(int n, int p);
 
 /*
@@ -25,14 +26,20 @@ int main() {
   double num;
   int x, y;
 
-  hi();
-  echo();
+  // hi();
+  // echo();
   parse(str);
   upper(str);
   printf("\n%s", str);
 
   printf("enter 2 nums (pow): ");
+
+  // can overflow (seg fault)
   scanf("%d %d", &x, &y);
+  printf("%d %d\n", x, y);
+  swap(&x, &y);
+  printf("%d %d\n", x, y);
+
   num = pow2(x, y);
   printf("%f\n\n", num);
 
@@ -67,6 +74,12 @@ void upper(char *str) {
 
     ptr++;
   }
+}
+
+void swap(int *x, int *y) {
+  int tmp = *x;
+  *x = *y;
+  *y = tmp;
 }
 
 double pow2(int n, int p) {

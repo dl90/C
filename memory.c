@@ -7,6 +7,7 @@
 #define randNum(min, max) ((rand() % (int)(((max) + 1) - (min))) + (min))
 
 void printAddrs(char *, int len);
+void printChar(char *, int len);
 void randChar(char *, int len);
 
 /*
@@ -30,7 +31,8 @@ int main() {
   /*
     malloc (memory allocation)
 
-    allocates a block of memory of specified bytes
+    dynamically allocates a block of memory of specified bytes from the heap
+    the returned pointer to the allocated memory is on the stack
     does not initialize or clear existing data in memory block
     type is needed to calc size of allocation and pointer traversal
 
@@ -95,8 +97,10 @@ int main() {
   // free(mem_1);
   free(mem_2);
 
+  printf("\nfree(mem_2\n");
   printAddrs(mem_1, mem_1_len);
   printAddrs(mem_2, mem_2_len);
+  printf("\nmem_2\n");
 
   // assign NULL to freed pointers to prevent future accidental assignments
   // mem_1 = NULL;
@@ -110,8 +114,8 @@ int main() {
   */
   mem_2 = (char *)malloc(sizeof(char) * mem_1_len);
   mem_2 = memcpy(mem_2, mem_1, mem_1_len);
-  printAddrs(mem_1, mem_1_len);
-  printAddrs(mem_2, mem_1_len);
+  printChar(mem_1, mem_1_len);
+  printChar(mem_2, mem_1_len);
 
   /*
     memmove
@@ -125,8 +129,11 @@ int main() {
   printAddrs(nums, 10);
   printAddrs(ptr, 6);
 
+  // clean up
   free(mem_1);
   free(mem_2);
+  mem_1 = NULL;
+  mem_2 = NULL;
 
   return 0;
 }
@@ -138,6 +145,13 @@ void printAddrs(char *ptr, int len) {
       printf("\n");
   }
   printf("\n%s\n\n", ptr);
+}
+
+void printChar(char *ptr, int len) {
+  for (int i = 0; i < len; i++)
+    printf("%c", *(ptr + i));
+
+  printf("\n");
 }
 
 void randChar(char *ptr, int len) {
