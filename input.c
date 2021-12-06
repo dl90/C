@@ -13,7 +13,6 @@ int main() {
   float x;
   char *input_1;
 
-  // string buffers (array of char without strings terminating zero)
   char cmd[20];
   char args[MAX_STR_SIZE];
 
@@ -24,23 +23,25 @@ int main() {
   input_1 = NULL;
 
   /*
-    scanf only parses up to the first whitespace separated string
+    scanf only parses up to the first whitespace, tab, newline or EOF
     may overflow buffer
-    array is already a pointer to an address so no need for &
   */
   printf("command: ");
-  scanf("%s", cmd);
+  // scanf("%s", cmd);
 
-  /*
-    reads files or stdin
-    will not overflow
-  */
+  // up to 19 chars or first whitespace
+  // scanf("%19s", cmd);
+
+  // up to 19 chars or first newline
+  scanf("%19[^\n]", cmd);
+
+  // reads files or stdin, up to specified size - 1, newline or EOF, appends \0
   fgets(args, MAX_STR_SIZE, stdin);
   printf("%s %s\n\n", cmd, args);
 
-  printf("How many rows: ");
-  scanf("%d", &rows);
-  printRows(rows);
+  // printf("How many rows: ");
+  // scanf("%d", &rows);
+  // printRows(rows);
 
   // printf("\n\nsquare root: ");
   // scanf("%f", &x);

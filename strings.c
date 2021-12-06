@@ -26,14 +26,14 @@ void replace(char *, int, char *);
 int main() {
   // const types are scoped within the body it is defined
   const char *strs = "some long string";
+
   char str_buffer[STR_SIZE];
-  char *ptr_arr[3] = {"abc", "bcd", "cde"};
+  char *ptr_arr[] = {"abc", "bcd", "cde"};
 
   for (int i = 0; i < sizeof(ptr_arr) / sizeof(ptr_arr[0]); i++) {
     printf("%p %s\n", ptr_arr[i], ptr_arr[i]);
 
-    // pointer notation (same as ptr_arr[i])
-    char *x = *(ptr_arr + i);
+    char *x = ptr_arr[i];
     while (*x) {
       printf("\t%p %c\n", x, *x);
       x++;
@@ -53,12 +53,12 @@ void parse_print(char *str) {
   fgets(str, STR_SIZE, stdin);
 
   str[strcspn(str, "\n")] = 0;
-  printf("%s\n", str);
+  printf("%s %lu\n", str, strcspn(str, "\n"));
 }
 
 /*
-  can’t return local variable from a C function
-  they automatically destroyed when the function finished execution
+  can’t return dynamically allocated local variable from a C function
+  they are automatically destroyed when the function exits
 
   best solution is to use a passsed buffer and do manipulations on that buffer
 */

@@ -1,0 +1,11 @@
+{
+  "files.associations": {
+    "stdbool.h": "c",
+    "chrono": "c",
+    "ctype.h": "c",
+    "_ctype.h": "c",
+    "__config": "c",
+    "stdlib.h": "c",
+    "_types.h": "c"
+  }
+}

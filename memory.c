@@ -1,14 +1,18 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
 #define KB 1024
-#define randNum(min, max) ((rand() % (int)(((max) + 1) - (min))) + (min))
+#define randNum(min, max) ((rand() % (int)(max + 1 - min)) + min)
 
 void printAddrs(char *, int len);
-void printChar(char *, int len);
+void printChars(char *, int len);
 void randChar(char *, int len);
+int *randNums(int len);
+void selectSort(int *, int len);
+void bubbleSort(int *, int len);
 
 /*
   # dynamic memory allocation
@@ -25,6 +29,8 @@ void randChar(char *, int len);
 
 int main() {
 
+  // set random seed for rand()
+  srand(time(NULL));
   char *mem_1, *mem_2;
   unsigned int mem_1_len, mem_2_len;
 
@@ -114,8 +120,8 @@ int main() {
   */
   mem_2 = (char *)malloc(sizeof(char) * mem_1_len);
   mem_2 = memcpy(mem_2, mem_1, mem_1_len);
-  printChar(mem_1, mem_1_len);
-  printChar(mem_2, mem_1_len);
+  printChars(mem_1, mem_1_len);
+  printChars(mem_2, mem_1_len);
 
   /*
     memmove
@@ -135,11 +141,27 @@ int main() {
   mem_1 = NULL;
   mem_2 = NULL;
 
+  const int LEN = 20;
+  int *arr = randNums(LEN);
+  for (int i = 0; i < LEN; ++i)
+    printf("%d ", arr[i]);
+  puts("");
+
+  // selectSort(arr, LEN);
+  // bubbleSort(arr, LEN);
+
+  for (int i = 0; i < LEN; ++i)
+    printf("%d ", arr[i]);
+
+  puts("");
+  free(arr);
+  arr = NULL;
+
   return 0;
 }
 
 void printAddrs(char *ptr, int len) {
-  for (int i = 0; i < len; i++) {
+  for (int i = 0; i < len; ++i) {
     printf("%p => %c\t", ptr + i, *(ptr + i));
     if (i && (i + 1) % 5 == 0)
       printf("\n");
@@ -147,7 +169,7 @@ void printAddrs(char *ptr, int len) {
   printf("\n%s\n\n", ptr);
 }
 
-void printChar(char *ptr, int len) {
+void printChars(char *ptr, int len) {
   for (int i = 0; i < len; i++)
     printf("%c", *(ptr + i));
 
@@ -155,8 +177,63 @@ void printChar(char *ptr, int len) {
 }
 
 void randChar(char *ptr, int len) {
-  srand((unsigned)time(0));
-
-  for (int i = 0; i < len; i++)
+  for (int i = 0; i < len; ++i)
     *(ptr + i) = randNum(33, 126);
+}
+
+int *randNums(int len) {
+  int *nums = (int *)calloc(len, sizeof(int));
+  if (nums == NULL) {
+    printf("randNums memory error\n");
+    exit(1);
+    return NULL;
+  }
+
+  for (int i = 0; i < len; ++i)
+    nums[i] = randNum(1, len);
+
+  return nums;
+}
+
+/*
+  Time Complexity:
+
+  Big O:  upper bound (worst case)
+  Omega Ω:  lower bound (best case)
+  Theta Θ: upper bound == lower bound (average case)
+*/
+void selectSort(int *arr, int len) {
+  int min, temp;
+
+  for (int i = 0; i < len - 1; ++i) {
+    min = i;
+    for (int j = i + 1; j < len; ++j) {
+      if (arr[j] < arr[min])
+        min = j;
+    }
+
+    if (min != i) {
+      temp = arr[i];
+      arr[i] = arr[min];
+      arr[min] = temp;
+    }
+  }
+}
+
+void bubbleSort(int *arr, int len) {
+  int temp;
+  bool swapped = false;
+
+  for (int i = 0; i < len - 1; ++i) {
+    for (int j = 0; j < len - i - 1; ++j) {
+      if (arr[j] > arr[j + 1]) {
+        temp = arr[j];
+        arr[j] = arr[j + 1];
+        arr[j + 1] = temp;
+        swapped = true;
+      }
+    }
+    if (!swapped)
+      break;
+  }
 }

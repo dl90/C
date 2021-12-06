@@ -1,11 +1,13 @@
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
 
 /*
-  # compile
+  compile
   {
-    compile => object code/tokenized instructions,
-    link    => adds C libraries to object code
+    preprocessor  => process "# commands" (macro substution), replaces includes, constants and macros with their values
+    compile       => object code/tokenized instructions
+    link          => links all object code into executable
   }
   gcc fileName.c [-o binaryFileName]
   cc
@@ -13,14 +15,31 @@
   c99
   make
 
-  # run
-  ./binaryFileName || a.out
+  run: ./binaryFileName || a.out
+  view assembly in debug: -exec disassemble
 */
 
 // constants (file scope/global definition)
-#define NUM 20
+#define NUM 20 // preprocessor dose not perform checks
 const int CONSTANT_VAR = 1;
 
+// enums
+enum days {
+  Mon,
+  Tue,
+  Wed,
+  Thu,
+  Fri,
+  Sat,
+  Sun
+};
+
+/*
+  function prototype signatures:
+    name
+    return type
+    parameter types
+*/
 void floatSizes(void);
 void typeOverflow(void);
 void arrays(void);
@@ -29,28 +48,45 @@ void pointers(void);
 void arrayAddress(char[]);
 void arrayPointer(char *);
 void array2D(void);
+void formatSpecifier(void);
+
+// can be nested
+typedef struct {
+  char *street;
+  char *number;
+  char *city;
+} Address;
+
+typedef struct {
+  char *name;
+  int age;
+  Address *address;
+} Person;
 
 int main() {
   // %d int format specifier
-  printf("Hello World %d\n\n", NUM);
+  printf("Hello World \t%d \t%d \t%p \n\n", NUM, CONSTANT_VAR, &CONSTANT_VAR);
 
   // block scope definition (declaration + initialization)
   char arr_1[] = "abcdefg";
 
-  // can be nested
-  struct person {
-    char *name;
-    int age;
-  };
+  enum days day = Tue;
+  printf("%d \n", day);
 
-  struct person a;
-  struct person b = {"Joe", 40};
+  Person a;
+  Person b = {"Joe", 40};
   a.name = "John";
   a.age = 30;
+  Address a_addr = {"Main St.", "123", "San Francisco"};
+  a.address = &a_addr;
 
-  printf("%lu\n", sizeof(struct person));
+  printf("%lu\n", sizeof(Person));
   printf("name: %s age: %d\n", a.name, a.age);
   printf("name: %s age: %d\n", b.name, b.age);
+  printf("%s %s %s\n\n", a.address->number, a.address->street, a.address->city);
+
+  // floating point division
+  printf("%f\n\a", fmod(1.2, 1.0));
 
   /*
     variable declaration only associates an address to the variable
@@ -58,9 +94,10 @@ int main() {
     whatever value is in that memory will be the value of the variable
   */
   char s[50];
-  printf("%s %lu\n", s, sizeof(s));
+  printf("%s %lu\n\n", s, sizeof(s));
 
   // floatSizes();
+  // formatSpecifier();
   // typeOverflow();
   // arrays();
   // strings();
@@ -69,8 +106,6 @@ int main() {
   // arrayPointer(&arr_1[0]);
   // printf("\n%s\n", arr_1);
   // array2D();
-
-  return 0;
 }
 
 /*
@@ -82,13 +117,13 @@ int main() {
 */
 void floatSizes() {
   printf("char size: %lu bytes\n", sizeof(char));
-  printf("int size: %lu bytes\n", sizeof(int));
   printf("short size: %lu bytes\n", sizeof(short));
+  printf("int size: %lu bytes\n", sizeof(int));
   printf("long size: %lu bytes\n", sizeof(long));
+  printf("long long size: %lu bytes\n\n", sizeof(long long));
   printf("float size: %lu bytes\n", sizeof(float));
   printf("double size: %lu bytes\n", sizeof(double));
-  printf("long double size: %lu bytes\n", sizeof(long double));
-  printf("long long size: %lu bytes\n\n", sizeof(long long));
+  printf("long double size: %lu bytes\n\n", sizeof(long double));
 }
 
 /*
@@ -134,11 +169,21 @@ void arrays() {
   char ** => array of strings
 */
 void strings() {
-  char hello_1[6] = {'H', 'e', 'l', 'l', 'o', '\0'};
-  char hello_2[6] = "World";
 
+  const char *string_literal = "Hello World";
+  char hello_1[6] = {'h', 'e', 'l', 'l', 'o', '\0'};
+  char hello_2[] = "world";
+
+  hello_1[0] = 'H';
+  hello_2[0] = 'W';
+
+  printf("%s\n", string_literal);
   printf("%s %s\n", hello_1, hello_2);
-  printf("%lu\n\n", strlen(hello_2));
+  printf("%lu\n", strlen(hello_2));
+
+  // sum of char difference between two strings
+  printf("%d\n", strcmp(hello_1, "Hallo"));
+  puts("");
 }
 
 /*
@@ -227,4 +272,28 @@ void array2D() {
   for (y = 0; y < 3; y++)
     printf("%s ", strs[y]);
   printf("\n");
+}
+
+void formatSpecifier() {
+  char *str = "hello";
+
+  printf("%%c \tchar: \t\t%30c\n", 'a');
+  printf("%%hd \tshort: \t\t%30hd\n", (short)1);
+  printf("%%hu \tunsigned short: %30hu\n", (unsigned short)1);
+  printf("%%d \tint: \t\t%30d\n", 33000);
+  printf("%%u \tunsigned int: \t%30u\n", 1000000);
+  printf("%%o \tunsigned octal: %30o\n", 0777);
+  printf("%%x \tunsigned hex: \t%30x\n", 0x32);
+  printf("%%ld \tlong: \t\t%30ld\n", 123456789L);
+  printf("%%lu \tunsigned long: \t%30lu\n", 123456789L);
+  printf("%%lld \tlong long: \t%30lld\n", 1234567890987654321LL);
+  printf("%%llu \tunsigned long long: %26llu\n", 1234567890987654321LL);
+  printf("%%f \tfloat: \t\t%30f\n", 1.23456789F);
+  printf("%%e \tfloat: \t\t%30e\n", 1.23456789F);
+  printf("%%f \tdouble: \t%30f\n", 1.23456789);
+  printf("%%lf \tdouble: \t%30lf\n", 1.23456789);
+  printf("%%le \tdouble: \t%30le\n", 1.23456789);
+  printf("%%Lf \tlong double: \t%30Lf\n", 1.23456789L);
+  printf("%%s \tstring: \t%30s\n", str);
+  printf("%%p \taddress: \t%30p\n", str);
 }
