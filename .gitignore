@@ -1,5 +1,7 @@
 **/.DS_Store
 **/*.out
 **/*.dSYM
-**/labs
+**/Debug
+**/.vs
 **/ds
+**/labs

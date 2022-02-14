@@ -33,7 +33,7 @@ int main(void) {
   readToMem(dataFile, inMemRecs, recCount);
   qsort(inMemRecs, recCount, sizeof(IndexRecord), compare);
 
-  unsigned long writeCount;
+  int writeCount;
   IndexHeader indexHeader = {.idxKey = keyType, .fileName = "", .recCount = recCount};
   strcpy(indexHeader.fileName, DATA_FILE_NAME);
 
