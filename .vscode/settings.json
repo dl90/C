@@ -6,6 +6,9 @@
     "_ctype.h": "c",
     "__config": "c",
     "stdlib.h": "c",
-    "_types.h": "c"
+    "_types.h": "c",
+    "ostream": "cpp",
+    "pthread.h": "c",
+    "errno.h": "c"
   }
 }
